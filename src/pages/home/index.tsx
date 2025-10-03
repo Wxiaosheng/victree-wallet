@@ -1,6 +1,13 @@
+import useWalletStore from "~src/store/walletStare";
 
 const Home = () => {
-  return <div>Home Page.</div>
+  const { currentAccount, updateAccount } = useWalletStore();
+
+  return <div>
+    Home Page. { currentAccount }
+
+    <div onClick={() => updateAccount()}>update</div>
+  </div>
 }
 
 export default Home;

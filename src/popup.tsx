@@ -5,7 +5,6 @@ import Token from "./pages/token"
 import NotFound from "./pages/error/NotFound"
 import Layout from "./pages/Layout"
 
-
 /**
  * @description 当前浏览器插件的入口文件  
  * 通常处理全局的相关配置  
