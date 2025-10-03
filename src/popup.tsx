@@ -1,4 +1,5 @@
-import { Routes, Route, HashRouter, Link } from "react-router-dom"
+import './styles.css';
+import { Routes, Route, HashRouter } from "react-router-dom"
 import Home from "./pages/home"
 import Token from "./pages/token"
 import NotFound from "./pages/error/NotFound"

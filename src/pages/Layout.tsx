@@ -5,7 +5,7 @@ import Header from '../components/Header';
  */
 const Layout = ({ children }) => {
 
-  return <div>
+  return <div className='px-4 py-8'>
     <Header />
     
     {children}
