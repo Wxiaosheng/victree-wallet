@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { VWallet } from "~src/types/wallet";
 
 const initStore = {
-  currentAccount: 'X0d35fdfg35je3fs',
+  currentAccount: '',
   accounts: []
 }
 

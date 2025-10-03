@@ -1,9 +1,10 @@
 import './styles.css';
 import { Routes, Route, HashRouter } from "react-router-dom"
-import Home from "./pages/home"
-import Token from "./pages/token"
-import NotFound from "./pages/error/NotFound"
 import Layout from "./pages/Layout"
+import Home from "./pages/Home"
+import Token from "./pages/Token"
+import CreateWallet from './pages/CreateWallet';
+import NotFound from "./pages/Error/NotFound"
 
 /**
  * @description 当前浏览器插件的入口文件  
@@ -17,8 +18,9 @@ function Popup() {
     <HashRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/create-wallet" element={<CreateWallet />} />
           <Route path="/token" element={<Token />} />
+          <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
