@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input, Modal, type FormInstance } from "antd";
+import { Button, Form, Input, message, Modal, type FormInstance } from "antd";
 import { WalletTwoTone } from "@ant-design/icons";
 import useWalletStore from "~src/store/walletStare";
 
@@ -18,7 +18,17 @@ const Create = (props: { form: FormInstance }) => {
 
   /** 创建钱包 */
   const handleCreate = async () => {
-    const { password } = form.getFieldsValue();
+    const { password, confirm } = form.getFieldsValue();
+
+    if (password.length < 8) {
+      message.error('密码不少于 8 位');
+      return;
+    }
+
+    if (confirm !== password) {
+      message.error('请输入相同的密码!!');
+      return;
+    }
 
     const { mnemonic } = await createWallet(password);
 
@@ -51,17 +61,7 @@ const Create = (props: { form: FormInstance }) => {
       label="确认密码"
       dependencies={['password']}
       hasFeedback
-      rules={[
-        { required: true, message: '请输入有效密码!' },
-        ({ getFieldValue }) => ({
-          validator(_, value) {
-            if (!value || getFieldValue('password') === value) {
-              return Promise.resolve();
-            }
-            return Promise.reject(new Error('请输入相同的密码!!'));
-          },
-        }),
-      ]}
+      rules={[{ required: true, message: '请输入有效密码!' }]}
     >
       <Input.Password placeholder="再次输入密码" />
     </Form.Item>
