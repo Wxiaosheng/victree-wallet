@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Form, Radio, type RadioChangeEvent } from "antd";
 import Create from "./Create";
 import type { CheckboxGroupProps } from 'antd/es/checkbox';
+import ImportKey from "./ImportKey";
+import ImportMnemonic from "./ImportMnemonic";
 
 /** 页面 tab */
 enum CreateTab {
@@ -21,7 +23,6 @@ const options: CheckboxGroupProps<string>['options'] = [
 
 const CreateWallet = () => {
   const [tab, setTab] = useState(CreateTab.create);
-  const [form] = Form.useForm();
 
   const handleChange = (e: RadioChangeEvent) => {
     setTab(e.target.value)
@@ -35,12 +36,10 @@ const CreateWallet = () => {
       optionType="button"
       buttonStyle="solid"
       onChange={handleChange}
-    />
-    <Form form={form}>
-      { tab === CreateTab.create && (<Create form={form}/>) }
-      { tab === CreateTab.importKey && (<div>私钥导入</div>) }
-      { tab === CreateTab.importMnemonic && (<div>助记词导入</div>) }
-    </Form>
+    ></Radio.Group>
+    { tab === CreateTab.create && <Create /> }
+    { tab === CreateTab.importKey && <ImportKey /> }
+    { tab === CreateTab.importMnemonic && <ImportMnemonic /> }
   </div>
 }
 

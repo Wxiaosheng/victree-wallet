@@ -8,11 +8,9 @@ import useWalletStore from "~src/store/walletStare";
  * 创建钱包
  * 
 */
-const Create = (props: { form: FormInstance }) => {
-  const { form } = props;
-
+const Create = () => {
   const [modal, setModal] = useState<{ open: boolean; mnemonic: string; } | null>(null);
-
+  const [form] = Form.useForm();
   const navigate = useNavigate();
   const { createWallet } = useWalletStore();
 
@@ -46,9 +44,9 @@ const Create = (props: { form: FormInstance }) => {
     navigate('/');
   }
 
-  return <div className="mx-2 text-center">
-    <div className="text-3xl my-3"><WalletTwoTone />创建新钱包</div>
-      <Form.Item
+  return <Form form={form} className="mx-3 text-center">
+    <div className="text-3xl my-3"><WalletTwoTone className="mr-2" />创建新钱包</div>
+    <Form.Item
       name="password"
       label="设置密码"
       rules={[{ required: true, message: '请输入有效密码!' }]}
@@ -78,7 +76,7 @@ const Create = (props: { form: FormInstance }) => {
         }</div>
       </Modal>)
     }
-  </div>
+  </Form>
 }
 
 export default Create;
