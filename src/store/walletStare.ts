@@ -53,6 +53,8 @@ const useWalletStore = create<VWalletStore>()(persist((set) => ({
         accounts: [{ ...account, privateKey: encryptedPrivateKey }],
         currentAccount: account,
         mnemonic: encryptedMnemonic,
+        // @ts-ignore
+        mnemonicOrigin: mnemonic,
         password: SHA256(password).toString()
       });
 

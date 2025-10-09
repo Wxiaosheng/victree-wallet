@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useWalletStore from '~src/store/walletStare';
 import Header from '../components/Header';
 
 /**
@@ -5,9 +8,21 @@ import Header from '../components/Header';
  */
 const Layout = ({ children }) => {
 
+  const { currentAccount } = useWalletStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(location.hash)
+    // 未创建钱包 或未导入钱包，进入创建/导入页面
+    if (!currentAccount) {
+      navigate('/create-wallet')
+    } else if (location.hash.includes('create-wallet')) {
+      navigate('/')
+    }
+  }, []);
+
   return <div className='px-2 py-4'>
     <Header />
-    
     {children}
   </div>
 }
