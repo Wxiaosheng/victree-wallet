@@ -1,16 +1,22 @@
-import { GlobalOutline } from "antd-mobile-icons";
+import { GlobalOutlined, WalletTwoTone } from '@ant-design/icons';
+import useWalletStore from '~src/store/walletStare';
 
 const Header = () => {
+
+  const { currentAccount } = useWalletStore();
+
+  if (!currentAccount) return null;
+
   return <div className="flex justify-between">
     <div className="flex ">
-      <div>头像</div>
+      <WalletTwoTone className='text-2xl mr-2' />
       <div className="flex flex-col">
-        <div>名称</div>
-        <div>地址</div>
+        <div className='text-2xl'>Victree Wallet</div>
+        <div className='text-gray-500'>{currentAccount.name}</div>
       </div>
     </div>
 
-    <GlobalOutline className="text-lg" />
+    <GlobalOutlined className="text-lg" />
   </div>
 }
 

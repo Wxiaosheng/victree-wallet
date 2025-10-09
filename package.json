@@ -10,8 +10,11 @@
     "package": "plasmo package"
   },
   "dependencies": {
-    "antd-mobile": "^5.41.1",
-    "antd-mobile-icons": "^0.3.0",
+    "@ant-design/icons": "~5.6.1",
+    "antd": "^5.27.4",
+    "bip39": "^3.1.0",
+    "crypto-js": "^4.2.0",
+    "ethers": "^6.15.0",
     "plasmo": "0.90.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
