@@ -22,8 +22,10 @@ export interface VNetwork {
 
   /******** 重要字段 ********/
   /** 原生代币信息 */
-  nativeCurrency: NativeCurrency;
-
+  symbol: string;
   /** 区块链浏览器 */
   blockExplorer: string;
+
+  /** 是否是自定义网络 */
+  isCustom: boolean;
 }

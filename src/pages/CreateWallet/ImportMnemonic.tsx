@@ -20,10 +20,7 @@ const ImportMnemonic = () => {
   const handleImport = async () => {
     // 数据合法性校验
     const { mnemonic, password } = form.getFieldsValue();
-    console.log('validateMnemonic(mnemonic)', {
-      mnemonic,
-      flag: validateMnemonic(mnemonic)
-    })
+
     if (!validateMnemonic(mnemonic)) {
       message.error("您输入的助记词不合法，请输入正确的助记词");
       return;

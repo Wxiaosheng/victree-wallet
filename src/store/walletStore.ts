@@ -1,10 +1,11 @@
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 import * as bip39 from 'bip39';
-import { HDNodeWallet, Wallet } from 'ethers';
+import { HDNodeWallet, Wallet, JsonRpcProvider } from 'ethers';
 import { AES, SHA256 } from 'crypto-js'
 import { NETWORKS } from "./contants";
 import type { VWallet, VWalletStore, WalletAccount } from "~src/types/wallet";
+import type { VNetwork } from "~src/types/network";
 
 const initStore: VWallet = {
   isLocked: false,
@@ -109,6 +110,46 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
       } catch (error) {
         throw Error('创建钱包失败', error);
       }
+    },
+
+    /** 验证网络 */
+    testNetwork: async (network: VNetwork) => {
+      // 测试网络连接
+      const provider = new JsonRpcProvider(network.rpcUrl);
+      const networkInfo = await provider.getNetwork();
+      if (networkInfo.chainId !== BigInt(network.chainId)) {
+        throw new Error('链 ID 不匹配');
+      }
+    },
+
+    /** 切换网络 */
+    switchNetwork: async (id: string) => {
+      const store = get();
+      // 获取用户选择的网络
+      const network = store.networks.filter(net => net.id === id)?.[0];
+      if (!network) {
+        throw new Error('你选择的网络不存在！！')
+      }
+
+      await store.testNetwork(network);
+
+      // 设置新网络
+      set(state => ({
+        ...state,
+        currentNetwork: network
+      }));
+    },
+
+    /** 添加网络 */
+    addNetwork: async (network: VNetwork) => {
+      const store = get();
+      await store.testNetwork(network);
+
+      set(state => ({
+        ...state,
+        currentNetwork: network,
+        networks: [...state.networks, network]
+      }));
     }
   }),
   {

@@ -2,9 +2,10 @@ import { Modal, type ModalProps } from 'antd';
 
 /** 全局覆盖的弹框 */
 const FullModal = (props: ModalProps) => {
-  const { title, open, onCancel, onOk, children } = props;
+  const { loading, title, open, onCancel, onOk, children } = props;
 
   return <Modal
+    loading={loading}
     title={title}
     open={open}
     mask={false}

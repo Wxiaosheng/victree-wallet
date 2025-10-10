@@ -1,4 +1,4 @@
-import type { VNetwork } from "./Network";
+import type { VNetwork } from "./network";
 
 /** Victree wallet 类型定义 */
 export interface VWallet {
@@ -33,6 +33,15 @@ export interface VWalletStore extends VWallet {
 
   /** 通过助记词导入钱包 */
   importWalletByMnemonic: (mnemonic: string, password: string) => Promise<{ account: WalletAccount;}>
+
+  /** 切换网络 */
+  switchNetwork: (id: string) => Promise<void>;
+
+  /** 测试网路 */
+  testNetwork: (network: VNetwork) => Promise<void>;
+
+  /** 添加网络 */
+  addNetwork: (network: VNetwork) => Promise<void>;
 }
 
 /** Victree wallet 的 account */
