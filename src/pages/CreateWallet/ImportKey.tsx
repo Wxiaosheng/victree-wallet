@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
 import { KeyOutlined } from '@ant-design/icons';
 import { isValidPrivateKey } from "~src/utils/wallet";
-import useWalletStore from "~src/store/walletStare";
+import useWalletStore from "~src/store/walletStore";
 
 /**
  * 通过私钥导入钱包

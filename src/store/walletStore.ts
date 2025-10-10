@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import * as bip39 from 'bip39';
 import { HDNodeWallet, Wallet } from 'ethers';
 import { AES, SHA256 } from 'crypto-js'
+import { NETWORKS } from "./contants";
 import type { VWallet, VWalletStore, WalletAccount } from "~src/types/wallet";
 
 const initStore: VWallet = {
@@ -12,6 +13,9 @@ const initStore: VWallet = {
   mnemonic: null,
   password: null,
   privateKey: null,
+  
+  currentNetwork: NETWORKS[0],
+  networks: NETWORKS,
 }
 
 /**

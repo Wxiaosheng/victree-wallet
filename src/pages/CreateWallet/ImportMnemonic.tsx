@@ -2,7 +2,7 @@ import { validateMnemonic } from "bip39";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
 import { ProfileTwoTone } from '@ant-design/icons';
-import useWalletStore from "~src/store/walletStare";
+import useWalletStore from "~src/store/walletStore";
 
 /** 
  * 通过助记词导入钱包 

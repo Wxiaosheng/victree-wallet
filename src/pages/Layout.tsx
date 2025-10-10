@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useWalletStore from '~src/store/walletStare';
+import useWalletStore from '~src/store/walletStore';
 import Header from '../components/Header';
 
 /**

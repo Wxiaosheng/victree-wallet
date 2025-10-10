@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, message, Modal, type FormInstance } from "antd";
 import { WalletTwoTone } from "@ant-design/icons";
-import useWalletStore from "~src/store/walletStare";
+import useWalletStore from "~src/store/walletStore";
 
 /**
  * 创建钱包

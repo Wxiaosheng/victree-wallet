@@ -1,5 +1,8 @@
+import type { VNetwork } from "./Network";
+
 /** Victree wallet 类型定义 */
 export interface VWallet {
+  /******** 钱包/账户 ********/
   /** 是否锁定 */
   isLocked: boolean;
   /** 当前选中的账户 */
@@ -12,6 +15,12 @@ export interface VWallet {
   password: string | null;
   /** 私钥（加密） */
   privateKey: string | null;
+
+  /******** 网络 ********/
+  /** 当前网络 */
+  currentNetwork: VNetwork;
+  /** 网络配置 */
+  networks: VNetwork[];
 }
 
 /** 全局状态管理 */
