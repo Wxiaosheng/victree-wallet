@@ -1,4 +1,4 @@
-import { GlobalOutlined, WalletTwoTone } from '@ant-design/icons';
+import { GlobalOutlined, WalletTwoTone, LogoutOutlined } from '@ant-design/icons';
 import useWalletStore from '~src/store/walletStare';
 
 const Header = () => {
@@ -15,8 +15,10 @@ const Header = () => {
         <div className='text-gray-500'>{currentAccount.name}</div>
       </div>
     </div>
-
-    <GlobalOutlined className="text-lg" />
+    <div className='flex flex-center'>
+      <GlobalOutlined className="text-lg mr-4" />
+      <LogoutOutlined className="text-lg" />
+    </div>
   </div>
 }
 
