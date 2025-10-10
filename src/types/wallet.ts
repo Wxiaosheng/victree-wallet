@@ -1,3 +1,4 @@
+import type { JsonRpcProvider } from 'ethers';
 import type { VNetwork } from "./network";
 
 /** Victree wallet 类型定义 */

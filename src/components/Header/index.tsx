@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Typography } from 'antd';
 import { GlobalOutlined, WalletTwoTone, LogoutOutlined } from '@ant-design/icons';
 import useWalletStore from '~src/store/walletStore';
 import NetworkConfig from '../NetworkConfig';
@@ -13,11 +14,11 @@ const Header = () => {
   if (!currentAccount) return null;
 
   return <div className="flex justify-between">
-    <div className="flex ">
+    <div className="flex">
       <WalletTwoTone className='text-2xl mr-2' />
       <div className="flex flex-col">
-        <div className='text-2xl'>Victree Wallet</div>
-        <div className='text-gray-500'>{currentAccount.name}</div>
+        <div className='text-2xl'>{currentAccount.name}</div>
+        <Typography.Paragraph copyable ellipsis className='w-40 text-gray-500'>{currentAccount.address}</Typography.Paragraph>
       </div>
     </div>
     <div className='flex flex-center'>
