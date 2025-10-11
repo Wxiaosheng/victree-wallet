@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 import * as bip39 from 'bip39';
 import { HDNodeWallet, Wallet, JsonRpcProvider } from 'ethers';
-import { AES, SHA256 } from 'crypto-js'
+import { AES, SHA256, enc } from 'crypto-js'
 import { NETWORKS } from "./contants";
 import type { VWallet, VWalletStore, WalletAccount } from "~src/types/wallet";
 import type { VNetwork } from "~src/types/network";
@@ -28,11 +28,10 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
     /** 创建新钱包 */
     createWallet: async (password: string) => {
       try {
+        const store = get();
+
         // 1、随机 生成助记词
         const mnemonic = bip39.generateMnemonic();
-        console.log("助记词：", mnemonic);
-
-        const store = get();
         const { account } = await store.importWalletByMnemonic(mnemonic, password);
   
         return { mnemonic, account }
@@ -53,8 +52,8 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
           index: 0
         };
 
-        const encryptedPrivateKey = AES.encrypt(privateKey, password).toString();
         const encryptedPassword = SHA256(password).toString();
+        const encryptedPrivateKey = AES.encrypt(privateKey, password).toString();
 
         set({
           isLocked: false,
@@ -76,6 +75,7 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
     importWalletByMnemonic: async (mnemonic: string, password: string) => {
       // 通过助记词， 创建钱包
       try {
+
         // 1、派生成出种子
         const seedBuffer = await bip39.mnemonicToSeed(mnemonic);
         const seed = new Uint8Array(seedBuffer);
@@ -92,8 +92,10 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
         };
 
         // 加密敏感数据
-        const encryptedMnemonic = AES.encrypt(mnemonic, password).toString();
-        const encryptedPrivateKey = AES.encrypt(wallet.privateKey, password).toString();
+        const encryptedPassword = SHA256(password).toString();
+        console.log('encryptedPassword', encryptedPassword)
+        const encryptedMnemonic = AES.encrypt(mnemonic, encryptedPassword).toString();
+        const encryptedPrivateKey = AES.encrypt(wallet.privateKey, encryptedPassword).toString();
 
         set({
           isLocked: false,
@@ -103,13 +105,69 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
           mnemonic: encryptedMnemonic,
           // @ts-ignore 临时调试用
           mnemonicOrigin: mnemonic,
-          password: SHA256(password).toString()
+          password: encryptedPassword,
         });
 
         return { account }
       } catch (error) {
         throw Error('创建钱包失败', error);
       }
+    },
+
+    /** 切换用户 */
+    switchAccount: async (address: string) => {
+      const store = get();
+
+      const account = store.accounts.filter(a => a.address === address)[0] || null;
+
+      if (!account) throw new Error('用户不存在');
+
+      set(state => ({
+        ...state,
+        currentAccount: account
+      }));
+    },
+
+    /** 验证密码 */
+    validPassword: (password: string) => {
+      const store = get();
+      console.log('validPassword', {
+        password,
+        enPassword: SHA256(password).toString(),
+        storePassword: store.password,
+      })
+      return SHA256(password).toString() === store.password;
+    },
+
+    /** 添加账户 */
+    addAccount: async (name: string) => {
+      const store = get();
+      // 恢复助记词
+      const decryptMnemonic = AES.decrypt(store.mnemonic, store.password).toString(enc.Utf8);
+
+      // 助记词派生种子
+      const seedBuffer = await bip39.mnemonicToSeed(decryptMnemonic);
+      const seed = new Uint8Array(seedBuffer);
+
+      // 种子派生钱包
+      const hdNode = await HDNodeWallet.fromSeed(seed);
+      const index = store.accounts.length;
+      const wallet = hdNode.derivePath(`m/44'/60'/0'/0/${index}`);
+
+      // 钱包生成账户（根据索引）
+      const account: WalletAccount = {
+        name,
+        index,
+        address: wallet.address,
+      }
+
+      set(state => ({
+        ...state,
+        currentAccount: account,
+        accounts: [...state.accounts, account],
+      }));
+
+      return account; 
     },
 
     /** 验证网络 */
@@ -150,7 +208,7 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
         currentNetwork: network,
         networks: [...state.networks, network]
       }));
-    }
+    },
   }),
   {
     name: 'victree-wallet',

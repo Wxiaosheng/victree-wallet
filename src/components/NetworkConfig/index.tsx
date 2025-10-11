@@ -8,12 +8,12 @@ import type { VNetwork } from '~src/types/network';
 
 interface NetworkConfigProps {
   open: boolean;
-  closeModal: () => void;
+  closeNetworkConfig: () => void;
 }
 
 /** 网络配置 */
 const NetworkConfig = (props: NetworkConfigProps) => {
-  const { open, closeModal } = props;
+  const { open, closeNetworkConfig } = props;
   const [loading, setLoading] = useState(false);
   const [popover, setPopover] = useState(false);
   const { currentNetwork, networks, switchNetwork, addNetwork } = useWalletStore();
@@ -21,7 +21,6 @@ const NetworkConfig = (props: NetworkConfigProps) => {
   /** 切换网络 */
   const handleSwitchNetwork = async (id: string) => {
     try {
-      console.log('切换网络');
       setLoading(true);
       await switchNetwork(id);
 
@@ -55,7 +54,7 @@ const NetworkConfig = (props: NetworkConfigProps) => {
   return <FullModal
     title="网络设置"
     open={open}
-    onCancel={closeModal}
+    onCancel={closeNetworkConfig}
   >
     <Spin spinning={loading}>
       <List
@@ -81,7 +80,6 @@ const NetworkConfig = (props: NetworkConfigProps) => {
         </List.Item>)}
       />
     </Spin>
-
   </FullModal>
 }
 

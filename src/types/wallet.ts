@@ -35,6 +35,15 @@ export interface VWalletStore extends VWallet {
   /** 通过助记词导入钱包 */
   importWalletByMnemonic: (mnemonic: string, password: string) => Promise<{ account: WalletAccount;}>
 
+  /** 切换用户 */
+  switchAccount: (address: string) => Promise<void>;
+
+  /** 验证密码 */
+  validPassword: (password: string) => boolean;
+
+  /** 添加账户 */
+  addAccount: (name: string) => Promise<WalletAccount>;
+
   /** 切换网络 */
   switchNetwork: (id: string) => Promise<void>;
 

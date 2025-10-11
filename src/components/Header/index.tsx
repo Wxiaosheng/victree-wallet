@@ -1,15 +1,14 @@
-import { useState } from 'react';
 import { Typography } from 'antd';
-import { GlobalOutlined, WalletTwoTone, LogoutOutlined } from '@ant-design/icons';
+import { GlobalOutlined, WalletTwoTone, LogoutOutlined, DownOutlined } from '@ant-design/icons';
 import useWalletStore from '~src/store/walletStore';
-import NetworkConfig from '../NetworkConfig';
+import useNetworkConfig from '../NetworkConfig/useNetworkConfig';
+import useAccountManage from '../AccountManage/useAccountManage';
 
 const Header = () => {
-  const [open, setOpen] = useState(false);
   const { currentAccount } = useWalletStore();
-
-  /** 关闭网络弹框 */
-  const closeModal = () => setOpen(false);
+  
+  const { openNetworkConfig, NetworkDOM } = useNetworkConfig();
+  const { openAccountManage, AccountManageDOM } = useAccountManage();
 
   if (!currentAccount) return null;
 
@@ -17,15 +16,16 @@ const Header = () => {
     <div className="flex">
       <WalletTwoTone className='text-2xl mr-2' />
       <div className="flex flex-col">
-        <div className='text-2xl'>{currentAccount.name}</div>
+        <div className='text-2xl cursor-pointer' onClick={openAccountManage}>{currentAccount.name} <DownOutlined className='text-xl' /></div>
         <Typography.Paragraph copyable ellipsis className='w-40 text-gray-500'>{currentAccount.address}</Typography.Paragraph>
       </div>
     </div>
     <div className='flex flex-center'>
-      <GlobalOutlined className="text-lg mr-4" onClick={() => setOpen(true)} />
+      <GlobalOutlined className="text-lg mr-4" onClick={openNetworkConfig} />
       <LogoutOutlined className="text-lg" />
     </div>
-    { open && <NetworkConfig open={open} closeModal={closeModal} /> }
+    { NetworkDOM }
+    { AccountManageDOM }
   </div>
 }
 
