@@ -39,7 +39,7 @@ const useAddTokenModal = () => {
         contractAddress: values.contractAddress,
         name: values.name,
         symbol: values.symbol,
-        decimals: values.decimals,
+        decimals: parseInt(values.decimals, 10) || 18,
         chainId: currentNetwork.chainId,
       });
       message.success('添加成功');
