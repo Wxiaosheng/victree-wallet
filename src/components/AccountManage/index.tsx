@@ -27,6 +27,11 @@ const AccountManage = (props: IAccountManageProps) => {
     setPopover(true);
   };
 
+  const handleSwitchAccount = async (address: string) => {
+    await switchAccount(address);
+    closeAccountManage();
+  }
+
   /** 添加账户 */
   const handleAddAccount = async (name: string) => {
     try {
@@ -56,7 +61,7 @@ const AccountManage = (props: IAccountManageProps) => {
         renderItem={(item, index) => (<List.Item
           key={item.address}
           className='cursor-pointer'
-          onClick={() => switchAccount(item.address)}
+          onClick={() => handleSwitchAccount(item.address)}
           extra={<Spin spinning={accountLoading}>
             <div className="text-xs ml-2" >{`${formatEther(balances?.[item.index] || 0)}${symbol}`}</div>
           </Spin>}
