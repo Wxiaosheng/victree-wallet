@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Radio, type RadioChangeEvent } from "antd";
 import NativeCurrency from "./NativeCurrency";
-import Token from "./Token";
+import Token from "../Token";
 import NFT from "./NFT";
 import type { CheckboxGroupProps } from 'antd/es/checkbox';
 

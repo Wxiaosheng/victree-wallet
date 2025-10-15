@@ -21,3 +21,10 @@ export const NETWORKS: VNetwork[] = [
     isCustom: false,
   }
 ]
+
+/** 代币类型 */
+export enum TokenType {
+  ERC20 = 'ERC20',
+  ERC721 = 'ERC721',
+  ERC1155 = 'ERC1155',
+}

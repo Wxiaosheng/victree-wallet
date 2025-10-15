@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 import * as bip39 from 'bip39';
-import { HDNodeWallet, Wallet, JsonRpcProvider } from 'ethers';
+import { HDNodeWallet, Wallet, JsonRpcProvider, Contract } from 'ethers';
 import { AES, SHA256, enc } from 'crypto-js'
 import { NETWORKS } from "./contants";
-import type { VWallet, VWalletStore, WalletAccount } from "~src/types/wallet";
+import type { VWallet, VWalletStore, WalletAccount, WalletToken } from "~src/types/wallet";
 import type { VNetwork } from "~src/types/network";
 
 const initStore: VWallet = {
@@ -17,6 +17,8 @@ const initStore: VWallet = {
   
   currentNetwork: NETWORKS[0],
   networks: NETWORKS,
+
+  tokens: [],
 }
 
 /**
@@ -209,6 +211,101 @@ const useWalletStore = create<VWalletStore>()(persist((set, get) => ({
         networks: [...state.networks, network]
       }));
     },
+
+    /** 验证 ERC20 */
+    validERC20: async (contractAddress: string) => {
+      const store = get();
+
+      const provider = new JsonRpcProvider(store.currentNetwork.rpcUrl);
+      const ERC20_ABI = [
+        "function name() view returns (string)",
+        "function symbol() view returns (string)",
+        "function decimals() view returns (uint8)",
+      ];
+      const contract = new Contract(contractAddress, ERC20_ABI, provider);
+      
+      try {
+        const name: string = await contract.name();
+        const symbol: string = await contract.symbol();
+        const decimals: number = await contract.decimals(); 
+        return { name, symbol, decimals };
+      } catch (error) {
+        console.error('validERC20 error', error)
+        // throw new Error('合约不是标准的 ERC-20 合约');
+      }
+    },
+
+    /** 验证 ERC721 合约 */
+    validERC721: async (contractAddress: string) => {
+      const store = get();
+
+      const provider = new JsonRpcProvider(store.currentNetwork.rpcUrl);
+      const ERC721_ABI = [
+        "function name() view returns (string)",
+        "function symbol() view returns (string)",
+        "function supportsInterface(bytes4 interfaceID) external view returns (bool)"
+      ];
+      const contract = new Contract(contractAddress, ERC721_ABI, provider);
+
+      try {
+        const name: string = await contract.name();
+        const symbol: string = await contract.symbol();
+        const isERC721 = await contract.supportsInterface('0x80ac58cd'); // ERC721 接口 ID
+
+        if (!isERC721) {
+          throw new Error('合约不是标准的 ERC-721 合约');
+        }
+
+        return { name, symbol };
+      } catch (error) {
+        throw new Error('合约不是标准的 ERC-721 合约');
+      }
+    },
+
+    /** 添加代币 */
+    addToken: async (token: WalletToken) => {
+      const store = get();
+      // 查看代币是否已存在
+      const exist = store.tokens.find(t => t.contractAddress === token.contractAddress && t.chainId === token.chainId);
+      if (exist) {
+        throw new Error('代币已存在');
+      }
+
+      set(state => ({
+        ...state,
+        tokens: [...state.tokens, token]
+      }));
+    },
+
+    /** 代币余额 */
+    tokenBalance: async (contractAddress: string, userAddress?: string) => {
+      const store = get();
+      userAddress = userAddress || store.currentAccount?.address;
+      if (!userAddress) {
+        throw new Error('请先选择账户');
+      }
+
+      const provider = new JsonRpcProvider(store.currentNetwork.rpcUrl);
+      const ERC20_ABI = [
+        "function balanceOf(address owner) view returns (uint256)"
+      ];
+      const contract = new Contract(contractAddress, ERC20_ABI, provider);
+
+      try {
+        const balance: bigint = await contract.balanceOf(store.currentAccount.address);
+        return balance;
+      } catch (error) {
+        throw new Error('获取余额失败');
+      }
+    },
+
+    /** 删除代币 */
+    removeToken: async (contractAddress: string) => {
+      set(state => ({
+        ...state,
+        tokens: state.tokens.filter(t => t.contractAddress !== contractAddress)
+      }))
+    }
   }),
   {
     name: 'victree-wallet',
