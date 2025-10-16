@@ -1,16 +1,22 @@
 import { Typography } from 'antd';
+import { useLocation } from 'react-router-dom';
 import { GlobalOutlined, WalletTwoTone, LogoutOutlined, DownOutlined } from '@ant-design/icons';
 import useWalletStore from '~src/store/walletStore';
 import useNetworkConfig from '../NetworkConfig/useNetworkConfig';
 import useAccountManage from '../AccountManage/useAccountManage';
 
+const notHeaderPaths = ['/transaction', '/preview'];
+
 const Header = () => {
+  const location = useLocation();
   const { currentAccount } = useWalletStore();
   
   const { openNetworkConfig, NetworkDOM } = useNetworkConfig();
   const { openAccountManage, AccountManageDOM } = useAccountManage();
 
-  if (!currentAccount) return null;
+  console.log('location', location.pathname, notHeaderPaths.includes(location.pathname))
+
+  if (!currentAccount || notHeaderPaths.includes(location.pathname)) return null;
 
   return <div className="flex justify-between">
     <div className="flex">
