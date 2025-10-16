@@ -101,9 +101,11 @@ export interface WalletToken {
   /** 小数位 */
   decimals: number;
   /** 代币类型 */
-  type: keyof typeof TokenType;
+  type: keyof typeof TokenType | 'native';
   /** 所属网络 ID */
   chainId: number;
   /** 余额 */
   balance?: bigint;
+  /** 是否为原生代币 */
+  isNative?: boolean;
 }
