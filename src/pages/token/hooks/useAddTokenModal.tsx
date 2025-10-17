@@ -2,12 +2,12 @@ import { useMemo, useState } from "react";
 import { Button, Form, Input, message, Modal, Select } from "antd";
 import { isAddress } from "ethers";
 import useWalletStore from "~src/store/walletStore";
-import type { TokenType } from "~src/store/contants";
+import { TokenType } from "~src/store/contants";
 
 const tokenTypes = [
-  { label: 'ERC20', value: 'erc20' },
-  { label: 'ERC721', value: 'erc721' },
-  { label: 'ERC1155', value: 'erc1155' },
+  { label: TokenType.ERC20, value: TokenType.ERC20 },
+  { label: TokenType.ERC721, value: TokenType.ERC721 },
+  { label: TokenType.ERC1155, value: TokenType.ERC1155 },
 ]
 
 /**
@@ -58,7 +58,7 @@ const useAddTokenModal = () => {
       return;
     }
 
-    if (tokenType === 'erc20') {
+    if (tokenType === TokenType.ERC20) {
       try {
         const res = await validERC20(contractAddress);
         form.setFieldsValue({

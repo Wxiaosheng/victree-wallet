@@ -28,3 +28,15 @@ export enum TokenType {
   ERC721 = 'ERC721',
   ERC1155 = 'ERC1155',
 }
+
+/** ERC20 代币合约 ABI  */
+export const ERC20_ABI = [
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+  "function decimals() view returns (uint8)",
+  "function totalSupply() view returns (uint256)",
+  "function balanceOf(address) view returns (uint)",
+  "function transfer(address to, uint256 amount) returns (bool)",
+  "event Transfer(address indexed from, address indexed to, uint amount)",
+  "event Approval(address indexed owner, address indexed spender, uint amount)",
+]

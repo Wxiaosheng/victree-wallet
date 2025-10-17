@@ -5,7 +5,6 @@ import Home from "./pages/Home"
 import Token from "./pages/Token"
 import CreateWallet from './pages/CreateWallet';
 import Transaction from './pages/Transaction';
-import Preview from './pages/Preview';
 import NotFound from "./pages/Error/NotFound";
 
 /**
@@ -23,7 +22,6 @@ function Popup() {
           <Route path="/create-wallet" element={<CreateWallet />} />
           <Route path="/token" element={<Token />} />
           <Route path="/transaction" element={<Transaction />} />
-          <Route path="/preview" element={<Preview />} />
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

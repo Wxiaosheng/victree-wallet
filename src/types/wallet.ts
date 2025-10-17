@@ -1,4 +1,3 @@
-import type { JsonRpcProvider } from 'ethers';
 import type { VNetwork } from "./network";
 import type { TokenType } from '~src/store/contants';
 

@@ -1,8 +1,13 @@
-import { DownOutlined } from '@ant-design/icons';
+import { parseEther, parseUnits } from "ethers";
 import { Button, Form, Input, InputNumber } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { TokenType } from "~src/store/contants";
 import useAccountManage from '~src/components/AccountManage/useAccountManage';
 import useWalletStore from '~src/store/walletStore';
 import useTokenList from '../Token/hooks/useTokenList';
+import usePreview, { type PreviewData } from './usePreview';
+import Preview from './Preview';
+import FullModal from "~src/components/FullModal";
 
 /** 
  * 交易页面 
@@ -17,15 +22,37 @@ import useTokenList from '../Token/hooks/useTokenList';
  * 
  */
 const Transaction = () => {
-  const { currentAccount } = useWalletStore();
+  const [form] = Form.useForm();
+  const { currentAccount, currentNetwork } = useWalletStore();
   const { openAccountManage, AccountManageDOM } = useAccountManage();
   const { currentToken, openTokenList, TokenListDOM } = useTokenList();
+  const { previewData, savePreviewData, clearPreviewData, sendTransaction } = usePreview();
 
   const handleTranscation = async () => {
+    const values: PreviewData = form.getFieldsValue();
+
+    // 账户
+    values.from = currentAccount.address;
+
+    // 代币
+    values.token = currentToken;
+    if (currentToken.type === 'native') {
+      values.amount = parseEther(`${values.amount}`);
+      values.gasLimit = '25000'; // 不知道为什么 21000 会一直失败
+    } else if (currentToken.type === TokenType.ERC20) {
+      values.amount = parseUnits(`${values.amount}`, currentToken.decimals);
+      values.gasLimit = '60000';
+    }
+
+    // 网络相关信息
+    values.network = currentNetwork;
+    values.gasPrice = '20';
     
+    console.log('交易数据:', values);
+    savePreviewData(values);
   };
 
-  return <Form>
+  return <Form form={form} layout="vertical">
     <Form.Item label="From" name="from">
       <div className='flex flex-row justify-between cursor-pointer p-2 border border-gray-200 rounded-md' onClick={openAccountManage}>
         <div className='flex flex-col'>
@@ -49,6 +76,16 @@ const Transaction = () => {
     </Form.Item>
 
     <Button type="primary" className='w-full mt-4' onClick={handleTranscation}>发起交易</Button>
+
+    { // 交易预览
+      previewData && <FullModal open={!!previewData} title="交易预览" onCancel={clearPreviewData}>
+        <Preview 
+          previewData={previewData} 
+          clearPreviewData={clearPreviewData} 
+          sendTransaction={sendTransaction}
+        />
+      </FullModal>
+    }
 
     {AccountManageDOM}
     {TokenListDOM}

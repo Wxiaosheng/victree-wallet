@@ -5,9 +5,9 @@ const { Text } = Typography;
 /**
  * 文本省略中间
  */
-const EllipsisMiddle: React.FC<{ className: string; suffixCount: number; children: string }> = ({
+const EllipsisMiddle: React.FC<{ className?: string; suffixCount?: number; children: string }> = ({
   className,
-  suffixCount,
+  suffixCount = 5,
   children,
 }) => {
   const start = children.slice(0, children.length - suffixCount);
