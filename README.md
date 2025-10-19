@@ -35,3 +35,12 @@ This should create a production bundle for your extension, ready to be zipped an
 ## Submit to the webstores
 
 The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+
+
+
+1、gas 费用， 21000 调用失败
+2、获取交易历史（如何获取）
+3、钱包没有实现 EIP1193 标准
+4、chrome.scripting.executeScript 报错
+5、window.ethereum全局对象是怎么注入网页中的？
+6、内容脚本不也能获取到 钱包插件的数据吗？ 直接返回数据不行吗？ 为什么还需要后台脚本返回数据？

@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(location.hash)
+    console.log('Layout: ', location.hash)
     // 未创建钱包 或未导入钱包，进入创建/导入页面
     if (!currentAccount) {
       navigate('/create-wallet')

@@ -38,7 +38,7 @@
       "https://*/*"
     ],
     "permissions": [
-      "storage"
+      "storage", "scripting"
     ]
   }
 }
